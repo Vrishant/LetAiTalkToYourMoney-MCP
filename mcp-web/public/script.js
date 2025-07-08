@@ -88,12 +88,25 @@ sendBtn.addEventListener("click", async () => {
       return;
     }
 
-    const finalMessage = data.response
-      .split("\n")
-      .filter((line) => !line.startsWith("[Tool:"))
-      .join("\n");
+    // Extract tool info line if present
+    const lines = data.response.split("\n");
+    let toolInfoLine = null;
+    const filteredLines = [];
 
-    loadingMsg.innerHTML = marked.parse(finalMessage || "No response");
+    for (const line of lines) {
+      if (line.startsWith("[Tool:")) {
+        toolInfoLine = line;
+      } else {
+        filteredLines.push(line);
+      }
+    }
+
+    // Display tool info above the response if present
+    if (toolInfoLine) {
+      loadingMsg.innerHTML = `<div class="tool-info">${toolInfoLine}</div>` + marked.parse(filteredLines.join("\n") || "No response");
+    } else {
+      loadingMsg.innerHTML = marked.parse(filteredLines.join("\n") || "No response");
+    }
   } catch (err) {
     loadingMsg.innerHTML = marked.parse("Error: " + err.message);
   }

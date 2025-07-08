@@ -1,0 +1,62 @@
+[
+  {
+    "loanId": "car-loan",
+    "principal": 350000,
+    "interestRate": 9.5,
+    "emi": 8500
+  },
+  {
+    "loanId": "education-loan",
+    "principal": 800000,
+    "interestRate": 8.9,
+    "emi": 9500
+  },
+  {
+    "loanId": "personal-loan",
+    "principal": 250000,
+    "interestRate": 13.2,
+    "emi": 7000
+  },
+  {
+    "loanId": "credit-card-debt",
+    "principal": 120000,
+    "interestRate": 34.5,
+    "emi": 6000
+  },
+  {
+    "loanId": "home-loan",
+    "principal": 3200000,
+    "interestRate": 7.2,
+    "emi": 27000
+  },
+  {
+    "loanId": "bike-loan",
+    "principal": 90000,
+    "interestRate": 11.5,
+    "emi": 2500
+  },
+  {
+    "loanId": "furniture-finance",
+    "principal": 40000,
+    "interestRate": 15.0,
+    "emi": 1800
+  },
+  {
+    "loanId": "business-loan",
+    "principal": 550000,
+    "interestRate": 12.0,
+    "emi": 12500
+  },
+  {
+    "loanId": "wedding-loan",
+    "principal": 200000,
+    "interestRate": 14.0,
+    "emi": 5200
+  },
+  {
+    "loanId": "laptop-emi",
+    "principal": 70000,
+    "interestRate": 16.0,
+    "emi": 2200
+  }
+]
