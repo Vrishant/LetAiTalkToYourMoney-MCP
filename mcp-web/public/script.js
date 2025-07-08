@@ -1,13 +1,7 @@
 const micBtn = document.getElementById("micBtn");
 const queryInput = document.getElementById("queryInput");
-
-const csvUrl = "../assets/energy_model_data.csv";
-let csvData = [];
-let headers = [];
-
 // Initialize Web Speech API
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition =window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if (SpeechRecognition) {
   const recognition = new SpeechRecognition();
@@ -43,17 +37,28 @@ if (SpeechRecognition) {
   console.warn("Web Speech API not supported in this browser.");
 }
 
-document.getElementById("sendBtn").addEventListener("click", async () => {
-  const queryInput = document.getElementById("queryInput");
-  const responseDiv = document.getElementById("response");
-  const query = queryInput.value.trim();
 
+function appendMessage(sender, message) {
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble ${sender}`;
+  bubble.innerHTML = marked.parse(message);
+  chatBox.appendChild(bubble);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return bubble;
+}
+
+// Handle Send Button
+sendBtn.addEventListener("click", async () => {
+  const query = queryInput.value.trim();
   if (!query) {
-    responseDiv.textContent = "Please enter a query.";
+    appendMessage("bot", "Please enter a query.");
     return;
   }
 
-  responseDiv.textContent = "Loading...";
+  appendMessage("user", query);
+  queryInput.value = "";
+
+  const loadingMsg = appendMessage("bot", "Loading...");
 
   try {
     const res = await fetch("http://localhost:3000/query", {
@@ -71,8 +76,7 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
       } catch {
         errorData = { error: "Unknown error" };
       }
-      responseDiv.textContent =
-        "Error: " + (errorData.error || "Unknown error");
+      loadingMsg.innerHTML = marked.parse("Error: " + (errorData.error || "Unknown error"));
       return;
     }
 
@@ -80,25 +84,23 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
     try {
       data = await res.json();
     } catch {
-      responseDiv.textContent = "Error: Invalid JSON response from server";
+      loadingMsg.innerHTML = marked.parse("Error: Invalid JSON response from server");
       return;
     }
-    // Show only the final message, not intermediate tool messages
+
     const finalMessage = data.response
       .split("\n")
       .filter((line) => !line.startsWith("[Tool:"))
       .join("\n");
-    responseDiv.innerHTML = marked.parse(finalMessage || "No response");
+
+    loadingMsg.innerHTML = marked.parse(finalMessage || "No response");
   } catch (err) {
-    responseDiv.innerHTML = marked.parse("Error: " + err.message);
+    loadingMsg.innerHTML = marked.parse("Error: " + err.message);
   }
 });
 
 
-
-const functionMap = {
-
-};
+const functionMap = {};
 
 async function pollForInputParams() {
   try {
@@ -121,7 +123,7 @@ async function pollForInputParams() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadCsv();
+  // loadCsv();
   // pollForInputParams();
   // pollForMoveCommands(); // optional
 });
